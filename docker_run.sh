@@ -22,6 +22,7 @@ if [ -z "${DOCKER_PULL_PASSWORD}" ]; then
 fi
 
 docker login -u iainmackay -p $DOCKER_PULL_PASSWORD
+docker pull iainmackay/focus:${FOCUS_VERSION}
 docker run -d \
   --name focus \
   -p 80:80 \
@@ -32,7 +33,7 @@ docker run -d \
   $key_clause \
   -e DEBIAN_FRONTEND=noninteractive \
   -e PYTHONUNBUFFERED=1 \
-  -e FOCUS_MODE=production \
+  -e FOCUS_MODE=productiongit \
   -e SSL=y \
   --env-file ./${FOCUS_IDENTITY}.env \
   iainmackay/focus:${FOCUS_VERSION}

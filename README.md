@@ -19,7 +19,7 @@ Prepare you Ubuntu instance as follows:
 - configure your SSL certificate with `sudo certbot certonly --standalone -d yourdomain.com`
 - paste the following command into your terminal session and execute it:
 
-`groupadd -g 1000 focusgroup 2>/dev/null || echo "Group ID 1000 already exists."; useradd -u 1000 -g focusgroup -m focus 2>/dev/null || echo "User ID 1000 already exists."; mkdir -p /app; chown focus:focusgroup /app; cd /app; [ ! -d "/app/focus-distrib" ] && git clone https://github.com/rtc-focus/focus-distrib.git || echo "Repository already cloned."; mkdir -p /app/dav /app/db; echo "Script execution completed."`
+`groupadd -g 1000 focusgroup 2>/dev/null || echo "Group ID 1000 already exists."; useradd -u 1000 -g focusgroup -m focus 2>/dev/null || echo "User ID 1000 already exists."; mkdir -p /app; chown focus:focusgroup /app; cd /app; [ ! -d "/app/focus-distrib" ] && git clone https://github.com/rtc-focus-org/focus-distrib.git || echo "Repository already cloned."; mkdir -p /app/dav /app/db; echo "Script execution completed."`
 
 You should find it has created a `/app` folder filled with the contents of this github repository and two folders dav and db that by default will be used to store your user files and database respectively.
 

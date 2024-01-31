@@ -32,7 +32,7 @@ docker run -d \
   $key_clause \
   -e DEBIAN_FRONTEND=noninteractive \
   -e PYTHONUNBUFFERED=1 \
-  -e FOCUS_MODE=debug \
+  -e FOCUS_MODE=production \
   -e SSL=y \
   --env-file ./${FOCUS_IDENTITY}.env \
   iainmackay/focus:${FOCUS_VERSION}

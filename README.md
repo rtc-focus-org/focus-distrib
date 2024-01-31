@@ -19,11 +19,13 @@ Prepare you Ubuntu instance as follows:
 - configure your SSL certificate with `sudo certbot certonly --standalone -d yourdomain.com`
 - paste the following command into your terminal session and execute it:
 
-`groupadd -g 1000 focusgroup 2>/dev/null || echo "Group ID 1000 already exists."; useradd -u 1000 -g focusgroup -m focus 2>/dev/null || echo "User ID 1000 already exists."; mkdir -p /app; chown focus:focusgroup /app; cd /app; [ ! -d "/app/focus-distrib" ] && git clone https://github.com/rtc-focus-org/focus-distrib.git || echo "Repository already cloned."; mkdir -p /app/dav /app/db; echo "Script execution completed."`
+`sudo groupadd -g 1000 focusgroup 2>/dev/null || echo "Group ID 1000 already exists."; useradd -u 1000 -g focusgroup -m focus 2>/dev/null || echo "User ID 1000 already exists."; mkdir -p /app; cd /app; [ ! -d "/app/focus-distrib" ] && git clone https://github.com/rtc-focus-org/focus-distrib.git || echo "Repository already cloned."; mkdir -p /app/focus-distrib/dav /app/focus-distrib/db; chown -R focus:focusgroup /app; cd /app/focus-distrib; echo "Script execution completed."`
 
 You should find it has created a `/app` folder filled with the contents of this github repository and two folders dav and db that by default will be used to store your user files and database respectively.
 
 This means that your system disk will contain production data and must be backed up regularly. For more resilience you will need to adapt your configuration as described below (t.b.a.)
+
+Your current working directory should now be `/app/focus-distrib`
 
 ## Configure the application
 
@@ -62,3 +64,9 @@ exit
 ```
 
 Your system should now be up and running at https://your-domain/ui
+
+### Stopping your container
+
+To stop your container:
+`docker stop focus`
+`docker container prune`

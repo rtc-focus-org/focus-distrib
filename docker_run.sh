@@ -29,6 +29,7 @@ docker run -d \
   -p 443:443 \
   -v "${DB_PATH:-$(pwd)/db}:/app/db" \
   -v "${DAV_PATH:-$(pwd)/dav}:/app/dav" \
+  -v "${LOG_PATH:-$(pwd)/logs}:/app/logs" \
   $cert_clause \
   $key_clause \
   -e DEBIAN_FRONTEND=noninteractive \

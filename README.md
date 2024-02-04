@@ -37,7 +37,7 @@ Create the file app.env to contain the necessary secrets for your configuration
 
 This file should contain four lines as follows:
 ```
-FOCUS_VERSION=0.0.0
+FOCUS_VERSION=0.0.2
 FOCUS_IDENTITY=app
 FOCUS_DOMAIN=your domain
 DOCKER_PULL_PASSWORD=the Docker password to fetch the container image

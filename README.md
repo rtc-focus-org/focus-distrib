@@ -31,7 +31,7 @@ Your current working directory should now be `/app/focus-distrib`
 
 ### `app.env`
 
-Create the file app.env to contain the necessary secrets for your configuration
+Create the file app.env to contain the necessary secrets for your configuration. These are described in a separate section below.
 
 ### `env.sh`
 
@@ -77,3 +77,16 @@ Meantime you can operate the account with the superuser login.
 
 To stop your container:
 `docker stop focus`
+
+## Preparing the `app.env` file
+
+This is in Docker .env format (https://docs.docker.com/compose/environment-variables/env-file/). Note this is similar to the syntax for setting variables in a Linux shell script.
+A file app_template.env is provided.
+
+```
+cp app_template.env app.env # then edit app.env
+```
+
+Contents of `app_template.env`
+
+

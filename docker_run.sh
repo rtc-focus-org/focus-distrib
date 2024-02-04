@@ -23,7 +23,7 @@ fi
 
 docker login -u iainmackay -p $DOCKER_PULL_PASSWORD
 docker pull iainmackay/focus:$FOCUS_VERSION
-docker run -rm -d \
+docker run --rm -d \
   --name focus \
   -p 80:80 \
   -p 443:443 \

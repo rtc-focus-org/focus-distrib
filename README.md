@@ -12,7 +12,7 @@ configure the domain A record to point to the IP address of your instance (IPv4 
 
 ## Prepare the application
 
-Prepare you Ubuntu instance as follows:
+Prepare your Ubuntu instance as follows:
 - log in as root
 - run the command `sudo apt update`
 - install Docker with the command `apt install docker.io certbot`
@@ -29,11 +29,13 @@ Your current working directory should now be `/app/focus-distrib`
 
 ## Configure the application
 
-### `app.env`
+### Required files
+
+#### `app.env`
 
 Create the file app.env to contain the necessary secrets for your configuration. These are described in a separate section below.
 
-### `env.sh`
+#### `env.sh`
 
 This file should contain four lines as follows:
 ```
@@ -42,6 +44,11 @@ FOCUS_IDENTITY=app
 FOCUS_DOMAIN=your domain
 DOCKER_PULL_PASSWORD=the Docker password to fetch the container image
 ```
+
+#### Google credentials file
+
+This file is supplied by GCS as a JSON document with essential information including secrets for accessing the speech API.
+When you have procured your document it should be saved in the file `/app/focus-distrib/gcs_speech_api.json`
 
 ### Running the container
 
@@ -80,13 +87,102 @@ To stop your container:
 
 ## Preparing the `app.env` file
 
-This is in Docker .env format (https://docs.docker.com/compose/environment-variables/env-file/). Note this is similar to the syntax for setting variables in a Linux shell script.
-A file app_template.env is provided.
+This is in Docker .env format (https://docs.docker.com/compose/environment-variables/env-file/).
+Note this is similar to the syntax for setting variables in a Linux shell script.
+Be mindful of the interpretation of spaces, hash characters, and single and double quotes.
 
+A file app_template.env is provided.
 ```
 cp app_template.env app.env # then edit app.env
 ```
 
-Contents of `app_template.env`
+## Contents of `app_template.env`
 
+```
+ALLOWED_HOSTS=["your.domain.com","111.111.111.111"] # Domain name of the site, and the host IP address
+SECRET_KEY="A phrase of your choice" # Used to encrypt session cookies
+
+API_KEY=######## # Vonage video key
+API_SECRET=######################################## # Your Vonage video secret
+
+TWILIO_ACCOUNT_SID=AC################################ # Your Twilio account sid
+TWILIO_AUTH_TOKEN=################################ # Your Twilio authorization token
+TWILIO_SIP_DOMAIN=#####.sip.twilio.com # Your Twilio SIP domain
+TWILIO_SIP_USERNAME=whatever # Your Twilio SIP username
+TWILIO_SIP_PASSWORD=whatever # Your Twilio SIP password
+TWILIO_PHONE_NUMBERS=""
+# See note below re Twilio phone numbers
+TWILIO_CHAT_FRIENDLY_NAME=whatever # Your friendly name for your Twilio chat service
+TWILIO_CHAT_SERVICE_SID=IS################################ # Id for your Twilio chat service
+TWILIO_SYNC_SERVICE_SID=IS################################ # Id for your Twilio sync service
+TWILIO_SYNC_FRIENDLY_NAME=t.b.a.
+TWILIO_API_FRIENDLY_NAME=whatever # Your friendly name for your Twilio API access
+TWILIO_API_SID=SK################################ SID of your Twilio API access
+TWILIO_API_SECRET=################################ Secret for your Twiio API access
+
+AWS_RECORDING_BUCKET=whatever # Name for your bucket where recordings will be stored by Vonage
+AWS_STORAGE_BUCKET_NAME=whatever2 # Name for Django upload file storage
+AWS_API_KEY=AK################## # What it says on the tin
+AWS_SECRET=bLeRVO8pMFFXQ+y2R2mqmI4JmZb4u1Wi1hK3Qjs+ # Ditto
+AWS_REGION_CODE=eu-west-2 # Ditto
+AWS_REGION_NAME=Europe (London) # Ditto
+	
+RECORDING_URL_EXPIRY=7200	# Life time of Recording URL given from management site and API - default 2 hours as here
+
+DOMAIN_NAME=your.chosen.domain
+BRAND_NAME="Your brand" # Text to appear where brand name is used in UI
+SITE_RESOURCE_ROOT=https://somewhere # URL path to where to find standard pages linked in UI: see note below
+
+SUPERUSERNAME=something # Your chosen name for your superuser
+SUPERPASSWORD=anotherthing # Your chosen password for your superuser
+
+DAEMON_SECRET="your chosen secret" # your choice of secret for the meeting Daemon user (unused presently)
+
+TEMI_API_KEY=##############... # Your API key for Temi transcriptions
+
+GOOGLE_PROJECT_ID="project name" # Name of your Google project hosting the transcription/translation API
+```
+
+### Twilio phone numbers
+
+Twilio phone numbers are used to support dial in/dial out access to meetings for users who do not have a microphone.
+This is an increasingingly rare use case. However, for the time being the SIP capability is required as the mechanism to deliver
+real-time voice for Google live transcription is dependent on a voice conference with an incoming SIP call from
+the Vonage Video server.
+
+The template shows no phone numbers configured. If you had a single UK number, the setting would look like this:
+```
+TWILIO_PHONE_NUMBERS="{\"+44##########\": {\"country\": \"UK\", \"display\": \"0##########\",\"voicing\": \"voice='alice' language='en-GB'\",\"text_language\": \"en\"}}"
+```
+
+- The phone number configuration is a JSON dictionary with an entry for every phone number
+that you wish to associate with this server.
+You might have several, for instance an 800 number, a geographic number and numbers in other
+countries for the convenience of international users joining the meeting.
+- The JSON string has to be escaped to conform with the .env file format rules.
+- The `display` option of the dictionary is the number as you wish to show it in the UI.
+- The other options are to select the language and voice to use in the IVR dialogue setting up calls.
+Details are in the Twilio documentation.
+
+Note that Twilio now have Know-Your-Customer requirements for you to satisfy before you can operate a telephone number.
+
+### Standard pages
+
+The following pages are expected to be provided by the links in the UI. They may be hosted at any HTTPS endpoint, as determined by your SITE_RESOURCE_ROOT setting, so long as they are publicly accessible. They should have compatible styling with your branding but bear in mind they can be accessed from any meeting which may have its own branding so something fairly generic is appropriate.
+
+- /help/connect
+- /help/user_help/`x` where x is a participant status:
+  - p help for users in meetings as participant
+  - f help for users in meetings as facilitator
+  - o help for users in meetings as observer
+  - m help for users in meetings as moderators
+  - r help for users in meetings as shy participants
+
+- /help/help-old-browser
+- /help/help-media-choice
+- /help/help-denied-permission
+- /privacy/recording-policy
+- /privacy/cookie-policy
+- /privacy/privacy-policy
+- /terms
 

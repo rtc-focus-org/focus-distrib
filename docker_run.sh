@@ -30,6 +30,7 @@ docker run --rm -d \
   -v "${DB_PATH:-$(pwd)/db}:/app/db" \
   -v "${DAV_PATH:-$(pwd)/dav}:/app/dav" \
   -v "${LOG_PATH:-$(pwd)/logs}:/app/logs" \
+  -v "${GCS_CREDENTIALS_PATH:-$(pwd)/gcs_speech_api.json}:/app/gcs_speech_api.json" \
   $cert_clause \
   $key_clause \
   -e DEBIAN_FRONTEND=noninteractive \

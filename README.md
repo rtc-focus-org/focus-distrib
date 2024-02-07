@@ -9,14 +9,20 @@ proprietary Docker image containing a version of the Focus software.
 - You require a root login to a fresh Linux instance.
 - If your intended domain name is, say, nvision.uk.com,
 configure the domain A record to point to the IP address of your instance (IPv4 presently).
+- Your host machine will need to have at least ports 22 (if you require SSH access), 80 (HTTP) and 443 (HTTPS) open for successful operation. This document does not discuss setting up a firewall on the host machine but limiting access to these ports is strongly recommended.
+- Your host machine should operate this application exclusively
 
 ## Prepare the application
 
 Prepare your Ubuntu instance as follows:
-- log in as root
+- log in:
+  - as root (in which case sudo is redundant but harmless in the following commands) *OR*
+  - as a sudo-capable user
 - run the command `sudo apt update`
 - install Docker with the command `apt install docker.io certbot`
 - configure your SSL certificate with `sudo certbot certonly --standalone -d yourdomain.com`
+- ensure your container will be able to read the certificate with
+```sudo find /etc/letsencrypt/live/yourdomain.com -type f -exec chown 1000:1000 {} \;```
 - paste the following command into your terminal session and execute it:
 
 `sudo groupadd -g 1000 focusgroup 2>/dev/null || echo "Group ID 1000 already exists."; sudo useradd -u 1000 -g focusgroup -m focus 2>/dev/null || echo "User ID 1000 already exists."; sudo mkdir -p /var/app; cd /var/app; [ ! -d "/var/app/focus-distrib" ] && sudo git clone https://github.com/rtc-focus-org/focus-distrib.git || echo "Repository already cloned."; sudo mkdir -p /var/app/focus-distrib/dav /var/app/focus-distrib/db /var/app/focus-distrib/logs/supervisor; sudo chown -R 1000:1000 /var; cd /var/app/focus-distrib; echo "Script execution completed."`
@@ -26,6 +32,8 @@ You should find it has created a `/var/app` folder filled with the contents of t
 This means that your system disk will contain production data and must be backed up regularly. For more resilience you will need to adapt your configuration as described below (t.b.a.)
 
 Your current working directory should now be `/var/app/focus-distrib`
+
+The application processes in the container run in user mode, as user 1000. That is why it is necessary to set up files on upit host machine that are owned by your local user 1000. 
 
 ## Configure the application
 
@@ -48,7 +56,11 @@ DOCKER_PULL_PASSWORD=the Docker password to fetch the container image
 #### Google credentials file
 
 This file is supplied by GCS as a JSON document with essential information including secrets for accessing the speech API.
-When you have procured your document it should be saved in the file `/app/focus-distrib/gcs_speech_api.json`
+When you have procured your document it should be saved in the file `/var/app/focus-distrib/gcs_speech_api.json`. Ensure
+the file is owned by user 1000 with
+```
+sudo chown 1000:1000 /var/app/focus-distrib/gcs_speech_api.json
+```
 
 ### Running the container
 

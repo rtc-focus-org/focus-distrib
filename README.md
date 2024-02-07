@@ -19,13 +19,13 @@ Prepare your Ubuntu instance as follows:
 - configure your SSL certificate with `sudo certbot certonly --standalone -d yourdomain.com`
 - paste the following command into your terminal session and execute it:
 
-`sudo groupadd -g 1000 focusgroup 2>/dev/null || echo "Group ID 1000 already exists."; useradd -u 1000 -g focusgroup -m focus 2>/dev/null || echo "User ID 1000 already exists."; mkdir -p /app; cd /app; [ ! -d "/app/focus-distrib" ] && git clone https://github.com/rtc-focus-org/focus-distrib.git || echo "Repository already cloned."; mkdir -p /app/focus-distrib/dav /app/focus-distrib/db /app/focus-distrib/logs/supervisor; chown -R focus:focusgroup /app; cd /app/focus-distrib; echo "Script execution completed."`
+`sudo groupadd -g 1000 focusgroup 2>/dev/null || echo "Group ID 1000 already exists."; sudo useradd -u 1000 -g focusgroup -m focus 2>/dev/null || echo "User ID 1000 already exists."; sudo mkdir -p /var/app; cd /var/app; [ ! -d "/var/app/focus-distrib" ] && sudo git clone https://github.com/rtc-focus-org/focus-distrib.git || echo "Repository already cloned."; sudo mkdir -p /var/app/focus-distrib/dav /var/app/focus-distrib/db /var/app/focus-distrib/logs/supervisor; sudo chown -R 1000:1000 /var/app; cd /var/app/focus-distrib; echo "Script execution completed."`
 
-You should find it has created a `/app` folder filled with the contents of this github repository and three folders dav, db and logs that by default will be used to store your user files, database and server logs respectively.
+You should find it has created a `/var/app` folder filled with the contents of this github repository and three folders dav, db and logs that by default will be used to store your user files, database and server logs respectively.
 
 This means that your system disk will contain production data and must be backed up regularly. For more resilience you will need to adapt your configuration as described below (t.b.a.)
 
-Your current working directory should now be `/app/focus-distrib`
+Your current working directory should now be `/var/app/focus-distrib`
 
 ## Configure the application
 
@@ -52,7 +52,7 @@ When you have procured your document it should be saved in the file `/app/focus-
 
 ### Running the container
 
-Execute the command `docker_run.sh`
+Execute the command `./docker_run.sh`
 
 The container should now be running as another Linux system inside the running instance.
 
@@ -168,7 +168,7 @@ Note that Twilio now have Know-Your-Customer requirements for you to satisfy bef
 
 ### Standard pages
 
-The following pages are expected to be provided by the links in the UI. They may be hosted at any HTTPS endpoint, as determined by your SITE_RESOURCE_ROOT setting, so long as they are publicly accessible. They should have compatible styling with your branding but bear in mind they can be accessed from any meeting which may have its own branding so something fairly generic is appropriate.
+The following pages are expected to be provided as there are hard-coded links to them in the UI. They may be hosted at any HTTPS endpoint, as determined by your SITE_RESOURCE_ROOT setting, so long as they are publicly accessible. They should have compatible styling with your branding but bear in mind they can be accessed from any meeting which may have its own branding so something fairly generic is appropriate.
 
 - /help/connect
 - /help/user_help/`x` where x is a participant status:

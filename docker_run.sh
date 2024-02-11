@@ -16,6 +16,13 @@ else
   cert_clause="-v ${SSL_CERT_PATH:-/etc/letsencrypt/live/${FOCUS_DOMAIN}/fullchain.pem}:/app/domain.crt"
   key_clause="-v ${SSL_KEY_PATH:-/etc/letsencrypt/live/${FOCUS_DOMAIN}/privkey.pem}:/app/domain.key"
 fi
+: ${FOCUS_MODE:=production}
+if [ "${FOCUS_MODE}" = "debug" ]; then
+  echo "..Running in debug mode"
+  debug_clause="-v $(pwd)/built:/app -v /app/node_modules"
+else
+  unset debug_clause
+fi
 if [ -z "${DOCKER_PULL_PASSWORD}" ]; then
   echo ".. DOCKER_PULL_PASSWORD is not defined"
   exit 1
@@ -31,6 +38,7 @@ docker run --rm -d \
   -v "${DAV_PATH:-$(pwd)/dav}:/app/dav" \
   -v "${LOG_PATH:-$(pwd)/logs}:/app/logs" \
   -v "${GCS_CREDENTIALS_PATH:-$(pwd)/gcs_speech_api.json}:/app/gcs_speech_api.json" \
+  $debug_clause \
   $cert_clause \
   $key_clause \
   -e DEBIAN_FRONTEND=noninteractive \

@@ -105,7 +105,7 @@ Be mindful of the interpretation of spaces, hash characters, and single and doub
 
 A file app_template.env is provided.
 ```
-cp app_template.env app.env # then edit app.env
+cp app.env_template app.env # then edit app.env
 ```
 
 ## Contents of `app_template.env`
@@ -122,7 +122,7 @@ TWILIO_AUTH_TOKEN=################################ # Your Twilio authorization t
 TWILIO_SIP_DOMAIN=#####.sip.twilio.com # Your Twilio SIP domain
 TWILIO_SIP_USERNAME=whatever # Your Twilio SIP username
 TWILIO_SIP_PASSWORD=whatever # Your Twilio SIP password
-TWILIO_PHONE_NUMBERS=""
+TWILIO_PHONE_NUMBERS={}
 # See note below re Twilio phone numbers
 TWILIO_CHAT_FRIENDLY_NAME=whatever # Your friendly name for your Twilio chat service
 TWILIO_CHAT_SERVICE_SID=IS################################ # Id for your Twilio chat service
@@ -142,17 +142,17 @@ AWS_REGION_NAME=Europe (London) # Ditto
 RECORDING_URL_EXPIRY=7200	# Life time of Recording URL given from management site and API - default 2 hours as here
 
 DOMAIN_NAME=your.chosen.domain
-BRAND_NAME="Your brand" # Text to appear where brand name is used in UI
+BRAND_NAME=Your brand # Text to appear where brand name is used in UI
 SITE_RESOURCE_ROOT=https://somewhere # URL path to where to find standard pages linked in UI: see note below
 
 SUPERUSERNAME=something # Your chosen name for your superuser
 SUPERPASSWORD=anotherthing # Your chosen password for your superuser
 
-DAEMON_SECRET="your chosen secret" # your choice of secret for the meeting Daemon user (unused presently)
+DAEMON_SECRET=your chosen secret # your choice of secret for the meeting Daemon user (unused presently)
 
 TEMI_API_KEY=##############... # Your API key for Temi transcriptions
 
-GOOGLE_PROJECT_ID="project name" # Name of your Google project hosting the transcription/translation API
+GOOGLE_PROJECT_ID=project name # Name of your Google project hosting the transcription/translation API
 ```
 
 ### Twilio phone numbers
@@ -164,7 +164,7 @@ the Vonage Video server.
 
 The template shows no phone numbers configured. If you had a single UK number, the setting would look like this:
 ```
-TWILIO_PHONE_NUMBERS="{\"+44##########\": {\"country\": \"UK\", \"display\": \"0##########\",\"voicing\": \"voice='alice' language='en-GB'\",\"text_language\": \"en\"}}"
+TWILIO_PHONE_NUMBERS={"+44##########": {"country": "UK", "display": "0##########","voicing": "voice='alice' language='en-GB", "text_language": "en"}}
 ```
 
 - The phone number configuration is a JSON dictionary with an entry for every phone number

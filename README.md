@@ -25,7 +25,7 @@ Prepare your Ubuntu instance as follows:
 ```sudo find /etc/letsencrypt/live/yourdomain.com -type f -exec chown 1000:1000 {} \;```
 - paste the following command into your terminal session and execute it:
 
-`sudo groupadd -g 1000 focusgroup 2>/dev/null || echo "Group ID 1000 already exists."; sudo useradd -u 1000 -g focusgroup -m focus 2>/dev/null || echo "User ID 1000 already exists."; sudo mkdir -p /var/app; cd /var/app; [ ! -d "/var/app/focus-distrib" ] && sudo git clone https://github.com/rtc-focus-org/focus-distrib.git || echo "Repository already cloned."; sudo mkdir -p /var/app/focus-distrib/dav /var/app/focus-distrib/db /var/app/focus-distrib/logs/supervisor; sudo chown -R 1000:1000 /var; cd /var/app/focus-distrib; echo "Script execution completed."`
+`sudo groupadd -g 1000 focusgroup 2>/dev/null || echo "Group ID 1000 already exists."; sudo useradd -u 1000 -g focusgroup -m focus 2>/dev/null || echo "User ID 1000 already exists."; sudo mkdir -p /var/app; cd /var/app; [ ! -d "/var/app/focus-distrib" ] && sudo git clone https://github.com/rtc-focus-org/focus-distrib.git || echo "Repository already cloned."; sudo mkdir -p /var/app/focus-distrib/dav /var/app/focus-distrib/db /var/app/focus-distrib/logs/supervisor; sudo chown -R 1000:1000 /var/app; cd /var/app/focus-distrib; echo "Script execution completed."`
 
 You should find it has created a `/var/app` folder filled with the contents of this github repository and three folders dav, db and logs that by default will be used to store your user files, database and server logs respectively.
 
@@ -47,7 +47,7 @@ Create the file app.env to contain the necessary secrets for your configuration.
 
 This file should contain four lines as follows:
 ```
-FOCUS_VERSION=0.0.2
+FOCUS_VERSION=0.0.5
 FOCUS_IDENTITY=app
 FOCUS_DOMAIN=your domain
 DOCKER_PULL_PASSWORD=the Docker password to fetch the container image

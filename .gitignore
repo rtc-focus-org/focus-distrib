@@ -1,3 +1,12 @@
+# Application private files
+
+dav/
+db/
+logs/
+app.env
+env.sh
+gcs_speech_api.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
